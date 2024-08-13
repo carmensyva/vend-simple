@@ -49,7 +49,7 @@ pipeline {
             steps {
                 script {
                     // Update the image URL in the manifest file
-                    sh 'sed -i 's|image: .*\\$|image: ${DOCKER_IMAGE}:${DOCKER_TAG}|' ${MANIFEST_PATH}'
+                    sh 'sed -i \'s|image: .*\\$|image: ${DOCKER_IMAGE}:${DOCKER_TAG}|\' ${MANIFEST_PATH}'
 
                     // Commit and push the changes back to the repository
                     withCredentials([usernamePassword(credentialsId: "${CREDENTIALS_GIT}", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
