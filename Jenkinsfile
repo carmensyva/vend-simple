@@ -14,7 +14,7 @@ pipeline {
             steps {
                 // Clone the repository and get the commit ID
                 script {
-                    git url: "${env.GIT_REPO}"
+                    git branch: 'main', url: "${env.GIT_REPO}"
                     COMMIT_ID = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
                     env.DOCKER_TAG = "${COMMIT_ID}"
                 }
