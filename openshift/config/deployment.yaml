@@ -65,5 +65,3 @@ spec:
         ports:
         - containerPort: 3000
       restartPolicy: Always
-      imagePullSecrets:
-      - name: [REGISTRY_SECRET_NAME] 
