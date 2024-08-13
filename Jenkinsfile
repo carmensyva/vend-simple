@@ -36,7 +36,7 @@ pipeline {
                     // Use the credentials stored in Jenkins
                     withCredentials([usernamePassword(credentialsId: "${CREDENTIALS_DOCKER}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         // Login to DockerHub or other registry
-                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                        sh 'echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin'
 
                         // Push the Docker image to the registry
                         sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
@@ -49,9 +49,7 @@ pipeline {
             steps {
                 script {
                     // Update the image URL in the manifest file
-                    sh """
-                        sed -i 's|image: .*$|image: ${DOCKER_IMAGE}:${DOCKER_TAG}|' ${MANIFEST_PATH}
-                    """
+                    sh "sed -i 's|image: .*$|image: ${DOCKER_IMAGE}:${DOCKER_TAG}|' ${MANIFEST_PATH}"
 
                     // Commit and push the changes back to the repository
                     withCredentials([usernamePassword(credentialsId: "${CREDENTIALS_GIT}", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
