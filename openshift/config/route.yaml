@@ -1,0 +1,14 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: vend
+  namespace: project-test
+  labels:
+    app.kubernetes.io/instance: vend-simple-2
+spec:
+  to:
+    kind: Service
+    name: vend-rout
+  tls: null
+  port:
+    targetPort: 3000
