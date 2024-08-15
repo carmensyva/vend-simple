@@ -4,18 +4,23 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'vend-simple' // Replace with your Docker image name
         GIT_REPO = 'https://github.com/carmensyva/vend-simple.git'
+        BRANCH = 'main'
         CREDENTIALS_DOCKER = 'dockerhub' // Jenkins credential ID
         CREDENTIALS_GIT = 'cred'
         MANIFEST_PATH = 'openshift/config/deployment.yaml' // Path to the manifest file
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Clone the repository and get the commit ID
+        stage('Clone'} {
+            step {
                 script {
-                    git branch: 'main', url: "${env.GIT_REPO}"
-                    COMMIT_ID = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    sh "git config --global http.sslVerify false"
+                    withCredentials([usernamePassword(credentialsId: 'cred', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "git clone https://\${USERNAME}:\${PASSWORD}@${GIT_REPO} source "
+                    }
+                    sh "git fetch"
+                    sh "git switch ${BRANCH}"
+                    COMMIT_ID = sh(script: 'git rev-parse --short=8 HEAD').trim()
                     env.DOCKER_TAG = "${COMMIT_ID}"
                 }
             }
